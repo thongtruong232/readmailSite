@@ -1,15 +1,20 @@
-# Sử dụng Python 3.8 làm base image
-# FROM python:3.8-slim
+# Base image phù hợp cho CapRover deploy
+FROM python:3.11-slim
 
-# Thiết lập thư mục làm việc
+# Giữ layer nhỏ và tránh prompt khi apt-get
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DJANGO_SETTINGS_MODULE=readmailweb.settings \
+    REDIS_HOST=redis \
+    REDIS_PORT=6379
+
 WORKDIR /app
 
-# Cài đặt các dependencies hệ thống
-RUN apt-get update && apt-get install -y \
+# Cài gói hệ thống cần cho biên dịch dependencies Python (libpq cho postgres)
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    python3-dev \
     libpq-dev \
-    gcc \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements.txt và cài đặt các Python dependencies
