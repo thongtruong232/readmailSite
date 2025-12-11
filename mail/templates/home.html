@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Get Code Email</title>
+  <style>
+    body {
+      background-color: #0f1c2e;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: #12263b;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 1800px;
+      margin: auto;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .row label {
+      margin-right: 10px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .checkbox-group label {
+      background-color: #158cba;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      display: none;
+    }
+
+    .checkbox-group input[type="checkbox"]:checked + label {
+      background-color: #0c5f87;
+    }
+
+    .email-input {
+    background-color: #0b1a2c;
+    border: 1px solid #158cba; /* Viền màu xanh dương */
+    border-radius: 8px; /* Bo góc */
+    width: 100%;
+    height: 200px;
+    margin-top: 10px;
+    padding: 10px;
+    color: #fff;
+    font-family: monospace;
+    resize: vertical; /* Cho phép người dùng thay đổi chiều cao của ô */
+    white-space: nowrap; /* Văn bản không tự động xuống dòng */
+    overflow-y: auto; /* Thanh cuộn dọc sẽ xuất hiện khi cần */
+    overflow-x: auto; /* Thanh cuộn ngang sẽ xuất hiện khi cần */
+    text-overflow: ellipsis; /* Thêm dấu "..." khi văn bản bị cắt */
+    cursor: pointer;
+    box-sizing: border-box; /* Đảm bảo padding không ảnh hưởng đến kích thước */
+    }
+
+    .email-input::-webkit-scrollbar {
+    width: 6px; /* Điều chỉnh chiều rộng của thanh cuộn dọc */
+    height: 6px; /* Điều chỉnh chiều cao của thanh cuộn ngang */
+    }
+
+    .email-input::-webkit-scrollbar-thumb {
+    background-color: #158cba; /* Màu của thanh cuộn */
+    border-radius: 8px; /* Bo góc thanh cuộn */
+    }
+
+    .email-input::-webkit-scrollbar-thumb:hover {
+    background-color: #10729b; /* Màu khi hover lên thanh cuộn */
+    }
+
+    .email-input:focus {
+    outline: none; /* Xóa viền mặc định khi focus */
+    border-color: #0c5f87; /* Thay đổi viền khi focus */
+    box-shadow: 0 0 5px rgba(21, 140, 186, 0.7); /* Thêm bóng cho ô nhập liệu khi focus */
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .actions label {
+      font-size: 14px;
+    }
+
+    .actions input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    .btn-get-code {
+      background-color: #158cba;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(21, 140, 186, 0.2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-get-code:hover {
+      background-color: #10729b;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(21, 140, 186, 0.3);
+    }
+
+    .btn-get-code:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(21, 140, 186, 0.2);
+    }
+
+    .btn-get-code::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    .btn-get-code:hover::after {
+      animation: ripple 1s ease-out;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(20, 20);
+        opacity: 0;
+      }
+    }
+
+    .type-get {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .type-get span {
+      font-weight: bold;
+    }
+
+    .toggle-btn {
+      background-color: #2ecc71;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      color: black;
+    }
+
+    .email-count {
+      background-color: #1c2f4a;
+      border: none;
+      color: white;
+      width: 40px;
+      text-align: center;
+      margin-left: 5px;
+    }
+
+    /* Styling for the table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #158cba;
+      color: white;
+    }
+
+    td {
+      background-color: #1c2f4a;
+      color: white;
+    }
+
+    /* Add ellipsis effect to the table cells */
+    .scrollable-cell {
+      max-width: 300px;          /* Set maximum width */
+      white-space: nowrap;       /* Prevent text from wrapping */
+      overflow: hidden;          /* Hide overflowing text */
+      text-overflow: ellipsis;   /* Add ellipsis when text overflows */
+      cursor: pointer;          /* Show pointer cursor to indicate the text is copyable */
+    }
+
+    /* Styling for the Copy button */
+    .copy-btn {
+      background-color: #158cba;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      min-width: 100px;
+    }
+
+    /* Add width for the Copy column */
+    .copy-column {
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .copied {
+      background-color: #2ecc71; /* Green color when copied */
+      transform: scale(1.1); /* Slight scaling effect */
+    }
+
+    .spacer-row td {
+        border: none !important;
+    }
+    
+    tr:not(.spacer-row):hover {
+        background-color: #f8f9fa;
+    }
+    
+    table tr:not(.spacer-row) {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    /* Add styles for the link in Context column */
+    .context-link {
+      color: #158cba;
+      text-decoration: none;
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .context-link:hover {
+      color: #10729b;
+      text-decoration: underline;
+    }
+
+    /* Add styles for STT column */
+    .stt-column {
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+      vertical-align: middle;
+      min-width: 80px;
+      color: #1d8cb8;
+      padding: 15px;
+      font-family: 'Arial', sans-serif;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .stt-column:hover {
+      color: #10729b;
+      transform: scale(1.1);
+      transition: all 0.2s ease;
+    }
+
+    /* Toast notification styles */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      background-color: #158cba;
+      color: white;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 1000;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .toast-icon {
+      font-size: 18px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+    }
+
+    .btn-get-code:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+      opacity: 0.7;
+    }
+
+    .btn-get-code:disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="title">Get Code Email version 2.0.0</div>
+  
+    <div class="type-get">
+      <span>Type Get:</span>
+      <span class="toggle-btn">OAuth2 & Graph API</span>
+    </div>
+  
+  
+    <form method="POST" action="{% url 'get_code' %}" id="emailForm">
+      {% csrf_token %}
+      <textarea class="email-input" placeholder="email|password|refresh_token|client_id" name="email_data" id="emailInput">{% if email_data %}{{ email_data }}{% endif %}</textarea>
+  
+      <div class="actions">
+        <button type="submit" class="btn-get-code">Get Code</button>
+      </div>
+    </form>
+  
+    <!-- Table to display results -->
+    
+    <div class="result">
+        <h3>Result:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mail</th>
+                    <th class="copy-column">Copy Mail</th>
+                    <th>From</th>
+                    <th>Context</th>
+                    <th class="copy-column">Copy</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for result in results_list %}
+                {% with results_count=result.results|length %}
+                  {% if results_count > 0 %}
+                    {% for res in result.results %}
+                      <tr>
+                        {% if forloop.first %}
+                          <td rowspan="{{ results_count }}" class="stt-column">{{ result.email_user.index }}</td>
+                          <td rowspan="{{ results_count }}" class="scrollable-cell">{{ result.email_user.address }}</td>
+                          <td rowspan="{{ results_count }}" class="copy-column">
+                            <button class="copy-btn" onclick="copyText('{{ result.email_user.address }}', this)">Copy</button>
+                          </td>
+                        {% endif %}
+                        <td class="scrollable-cell">{{ res.from }}</td>
+                        <td class="scrollable-cell">
+                          {% if res.link %}
+                            <a href="{{ res.link }}" class="context-link" target="_blank" rel="noopener noreferrer">{{ res.link }}</a>
+                          {% elif res.code %}
+                            {{ res.code }}
+                          {% else %}
+                            <span style="color: #aaa; font-style: italic;">No result</span>
+                          {% endif %}
+                        </td>
+                        <td class="copy-column">
+                          {% if res.link %}
+                            <button class="copy-btn" onclick="copyText('{{ res.link }}', this)">Copy Link</button>
+                          {% elif res.code %}
+                            <button class="copy-btn" onclick="copyText('{{ res.code }}', this)">Copy Code</button>
+                          {% else %}
+                            <button class="copy-btn" disabled>Copy</button>
+                          {% endif %}
+                        </td>
+                        <td>{{ res.date }}</td>
+                      </tr>
+                    {% endfor %}
+                  {% else %}
+                    <tr>
+                      <td class="stt-column">{{ result.email_user.index }}</td>
+                      <td class="scrollable-cell">{{ result.email_user.address }}</td>
+                      <td class="copy-column">
+                        <button class="copy-btn" onclick="copyText('{{ result.email_user.address }}', this)">Copy</button>
+                      </td>
+                      <td class="scrollable-cell">No result</td>
+                      <td class="scrollable-cell"><span style="color: #aaa; font-style: italic;">No result</span></td>
+                      <td class="copy-column"><button class="copy-btn" disabled>Copy</button></td>
+                      <td>No result</td>
+                    </tr>
+                  {% endif %}
+                {% endwith %}
+              {% endfor %}
+            </tbody>
+        </table>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">
+    <span class="loading-icon"></span>
+    <span class="toast-message">Processing emails...</span>
+  </div>
+
+  <script>
+    // Error handling for Google Analytics
+    window.addEventListener('error', function(e) {
+      if (e.target.src && e.target.src.includes('google')) {
+        e.preventDefault();
+        console.log('Google Analytics request failed, but application continues to work normally');
+      }
+    }, true);
+
+    // WebSocket connection
+    let socket = null;
+    let emailGroups = {};  // Object để lưu trữ nhóm email
+    function uuidv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    const socket_id = (window.crypto && window.crypto.randomUUID) ? window.crypto.randomUUID() : uuidv4();
+    localStorage.setItem("socket_id", socket_id);
+
+    function connectWebSocket() {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = protocol + '//' + window.location.host + '/ws/email_updates/?client_id=' + socket_id;
+      console.log('Attempting to connect WebSocket to:', wsUrl);
+      socket = new WebSocket(wsUrl);
+      socket.onopen = function(e) {
+        console.log('WebSocket connection established successfully');
+        console.log('WebSocket URL:', socket.url);
+      };
+
+      socket.onmessage = function(e) {
+        try {
+          const data = JSON.parse(e.data);
+          if (!data || !data.result || !data.email) {
+            console.error('Invalid WebSocket message format');
+            return;
+          }
+
+          const result = data.result;
+          const email = data.email;
+          const emailIndex = data.email_index;
+          const resultIndex = data.result_index;
+          
+          // Find the table body
+          const tbody = document.querySelector('table tbody');
+          if (!tbody) {
+            console.error('Table body not found');
+            return;
+          }
+
+          // Kiểm tra xem email đã có trong nhóm chưa
+          if (!emailGroups[email]) {
+            emailGroups[email] = {
+              index: emailIndex,
+              rows: []
+            };
+            // Tạo hàng đầu tiên cho email mới
+            const firstRow = document.createElement('tr');
+            // STT column
+            const sttCell = document.createElement('td');
+            sttCell.className = 'stt-column';
+            sttCell.textContent = emailIndex;
+            sttCell.rowSpan = 1;
+            firstRow.appendChild(sttCell);
+            // Email column
+            const emailCell = document.createElement('td');
+            emailCell.className = 'scrollable-cell';
+            emailCell.textContent = email;
+            emailCell.rowSpan = 1;
+            firstRow.appendChild(emailCell);
+            // Email Copy column
+            const emailCopyCell = document.createElement('td');
+            emailCopyCell.className = 'copy-column';
+            emailCopyCell.rowSpan = 1;
+            const emailCopyBtn = document.createElement('button');
+            emailCopyBtn.className = 'copy-btn';
+            emailCopyBtn.textContent = 'Copy';
+            emailCopyBtn.onclick = function() { copyText(email, this); };
+            emailCopyCell.appendChild(emailCopyBtn);
+            firstRow.appendChild(emailCopyCell);
+            // Thêm các cột khác cho kết quả đầu tiên
+            if (addResultCells(firstRow, result)) {
+              // Tìm vị trí để chèn dựa trên STT
+              let inserted = false;
+              const existingRows = tbody.getElementsByTagName('tr');
+              for (let i = 0; i < existingRows.length; i++) {
+                const row = existingRows[i];
+                const sttElement = row.querySelector('.stt-column');
+                if (sttElement) {
+                  const currentStt = parseInt(sttElement.textContent);
+                  if (emailIndex < currentStt) {
+                    tbody.insertBefore(firstRow, row);
+                    inserted = true;
+                    break;
+                  }
+                }
+              }
+              if (!inserted) {
+                tbody.appendChild(firstRow);
+              }
+              emailGroups[email].rows.push(firstRow);
+            }
+          } else {
+            // Email đã tồn tại, thêm hàng mới cho kết quả
+            const newRow = document.createElement('tr');
+            // Chỉ thêm hàng nếu có dữ liệu hợp lệ
+            if (addResultCells(newRow, result)) {
+              // Thêm vào sau hàng cuối cùng của nhóm email
+              const lastRow = emailGroups[email].rows[emailGroups[email].rows.length - 1];
+              if (lastRow && lastRow.parentNode) {
+                lastRow.parentNode.insertBefore(newRow, lastRow.nextSibling);
+                emailGroups[email].rows.push(newRow);
+                
+                // Cập nhật rowSpan cho STT, Email và Email Copy
+                const firstRow = emailGroups[email].rows[0];
+                if (firstRow) {
+                  const sttCell = firstRow.querySelector('.stt-column');
+                  const emailCell = firstRow.querySelector('.scrollable-cell');
+                  const emailCopyCell = firstRow.querySelector('.copy-column');
+                  if (sttCell) sttCell.rowSpan = emailGroups[email].rows.length;
+                  if (emailCell) emailCell.rowSpan = emailGroups[email].rows.length;
+                  if (emailCopyCell) emailCopyCell.rowSpan = emailGroups[email].rows.length;
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error processing WebSocket message:', error);
+        }
+      };
+
+      socket.onerror = function(error) {
+        console.error('WebSocket error:', error);
+        console.error('WebSocket URL:', socket.url);
+        console.error('WebSocket readyState:', socket.readyState);
+        // WebSocket readyState: 0=CONNECTING, 1=OPEN, 2=CLOSING, 3=CLOSED
+        if (socket.readyState === WebSocket.CLOSED) {
+          console.error('WebSocket failed to connect. Possible causes:');
+          console.error('1. Server is not running with ASGI (Daphne/Uvicorn)');
+          console.error('2. Server is not running on the expected port');
+          console.error('3. Redis is not running or not accessible');
+          console.error('4. WebSocket route is not properly configured');
+        }
+      };
+
+      socket.onclose = function(e) {
+        console.log('WebSocket connection closed');
+        console.log('Close code:', e.code);
+        console.log('Close reason:', e.reason);
+        console.log('Was clean:', e.wasClean);
+        hideToast();
+        // Chỉ reconnect nếu không phải lỗi do server từ chối
+        if (e.code !== 1006) { // 1006 = abnormal closure
+          setTimeout(connectWebSocket, 5000);
+        } else {
+          console.error('WebSocket connection failed. Please check server configuration.');
+        }
+      };
+    }
+
+    function addResultCells(row, result) {
+      // From column
+      const fromCell = document.createElement('td');
+      fromCell.className = 'scrollable-cell';
+      fromCell.textContent = result.from;
+      row.appendChild(fromCell);
+      // Context và Copy column
+      let hasData = false;
+      if (result.from === 'noreply@notifications.textnow.com' && (result.link || result.code)) {
+        hasData = true;
+        // Context column
+        const contextCell = document.createElement('td');
+        contextCell.className = 'scrollable-cell';
+        let copyValue = '';
+        if (result.link) {
+          const link = document.createElement('a');
+          link.href = result.link;
+          link.className = 'context-link';
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.textContent = result.link;
+          contextCell.appendChild(link);
+          copyValue = result.link;
+        } else if (result.code) {
+          contextCell.textContent = result.code;
+          copyValue = result.code;
+        }
+        row.appendChild(contextCell);
+
+        // Copy column với button
+        const copyCell = document.createElement('td');
+        copyCell.className = 'copy-column';
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.onclick = function() { copyText(copyValue, this); };
+        copyCell.appendChild(copyBtn);
+        row.appendChild(copyCell);
+      } else if (result.from === 'info@info.textfree.us' && result.code) {
+        hasData = true;
+        // Context column với code
+        const contextCell = document.createElement('td');
+        contextCell.className = 'scrollable-cell';
+        contextCell.textContent = result.code;
+        row.appendChild(contextCell);
+
+        // Copy column với button
+        const copyCell = document.createElement('td');
+        copyCell.className = 'copy-column';
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.onclick = function() { copyText(result.code, this); };
+        copyCell.appendChild(copyBtn);
+        row.appendChild(copyCell);
+      }
+
+      // Nếu không có dữ liệu hợp lệ, vẫn render dòng "No result"
+      if (!hasData) {
+        // Context column
+        const contextCell = document.createElement('td');
+        contextCell.className = 'scrollable-cell';
+        contextCell.innerHTML = '<span style="color: #aaa; font-style: italic;">No result</span>';
+        row.appendChild(contextCell);
+
+        // Copy column
+        const copyCell = document.createElement('td');
+        copyCell.className = 'copy-column';
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.disabled = true;
+        copyCell.appendChild(copyBtn);
+        row.appendChild(copyCell);
+      }
+
+      // Time column
+      const timeCell = document.createElement('td');
+      timeCell.textContent = result.date || 'No result';
+      row.appendChild(timeCell);
+      return true;
+    }
+    // Initialize WebSocket connection
+    connectWebSocket();
+
+    // JavaScript function to copy text to clipboard and provide visual feedback
+    function copyText(text, button) {
+      // Create a temporary textarea element to hold the text
+      var tempTextArea = document.createElement("textarea");
+      tempTextArea.value = text;
+      document.body.appendChild(tempTextArea);
+      
+      // Select and copy the text
+      tempTextArea.select();
+      document.execCommand('copy');
+      
+      // Remove the temporary textarea element
+      document.body.removeChild(tempTextArea);
+      
+      // Add the 'copied' class to the button for visual feedback
+      button.classList.add('copied');
+      
+      // Remove the 'copied' class after 1 second (reset the button style)
+      setTimeout(function() {
+        button.classList.remove('copied');
+      }, 1000);
+    }
+
+    // Lưu giá trị input vào localStorage
+    function saveInputValue() {
+        const emailInput = document.getElementById('emailInput');
+        if (emailInput.value) {
+            localStorage.setItem('savedEmailData', emailInput.value);
+            localStorage.setItem('savedEmailDataTime', Date.now());
+        }
+    }
+
+    // Khôi phục giá trị từ localStorage khi tải trang
+    window.addEventListener('load', function() {
+        const emailInput = document.getElementById('emailInput');
+        const savedData = localStorage.getItem('savedEmailData');
+        const savedTime = localStorage.getItem('savedEmailDataTime');
+        const now = Date.now();
+        const FIVE_MINUTES = 5 * 60 * 1000;
+        if (savedData && savedTime) {
+          if (now - parseInt(savedTime) < FIVE_MINUTES) {
+                  emailInput.value = savedData;
+              } else {
+                  // Xóa dữ liệu nếu quá 5 phút
+                  localStorage.removeItem('savedEmailData');
+                  localStorage.removeItem('savedEmailDataTime');
+              }
+        }
+    });
+
+    // Toast notification function
+    function showToast(message, duration = 0) {
+      const toast = document.getElementById('toast');
+      const toastMessage = toast.querySelector('.toast-message');
+      toastMessage.textContent = message;
+      toast.classList.add('show');
+      
+      if (duration > 0) {
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, duration);
+      }
+    }
+
+    function hideToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.remove('show');
+    }
+
+    let currentAbortController = null;
+    let isProcessing = false;
+
+    // Function to clear existing results
+    function clearResults() {
+      const tbody = document.querySelector('table tbody');
+      if (tbody) {
+        tbody.innerHTML = '';
+        emailGroups = {};
+      }
+    }
+
+    // Function to show processing status
+    function updateButtonStatus(isProcessing) {
+      const submitButton = document.querySelector('.btn-get-code');
+      if (isProcessing) {
+        submitButton.textContent = 'Processing...';
+        submitButton.disabled = true;
+      } else {
+        submitButton.textContent = 'Get Code';
+        submitButton.disabled = false;
+      }
+    }
+
+    // Handle form submission
+    document.getElementById('emailForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      saveInputValue();
+
+      // If already processing, abort the current process
+      if (isProcessing && currentAbortController) {
+        currentAbortController.abort();
+        currentAbortController = null;
+      }
+
+      // Create new AbortController for this request
+      currentAbortController = new AbortController();
+      const signal = currentAbortController.signal;
+
+      // Clear existing results
+      clearResults();
+      
+      // Show processing status
+      isProcessing = true;
+      updateButtonStatus(true);
+      showToast('Processing emails...');
+
+      // Add socket_id to form data
+      const formData = new FormData(this);
+      formData.append('socket_id', socket_id);
+      
+      // Submit form with abort signal
+      fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        signal: signal
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log('Form submitted successfully');
+          showToast('Processing started successfully', 3000);
+        } else {
+          throw new Error('Form submission failed');
+        }
+      })
+      .catch(error => {
+        if (error.name === 'AbortError') {
+          console.log('Request was aborted');
+          showToast('Previous process cancelled', 3000);
+        } else {
+          console.error('Error submitting form:', error);
+          showToast('Error processing emails', 3000);
+        }
+      })
+      .finally(() => {
+        isProcessing = false;
+        updateButtonStatus(false);
+        currentAbortController = null;
+      });
+    });
+
+    // Lưu giá trị khi người dùng nhập
+    document.getElementById('emailInput').addEventListener('input', function() {
+        saveInputValue();
+    });
+
+    // Xử lý paste
+    document.querySelector('.email-input').addEventListener('paste', function(e) {
+        let pastedData = e.clipboardData.getData('text');
+        pastedData = pastedData.trim();
+        e.preventDefault();
+        
+        // Thêm dấu xuống dòng nếu chưa có ở cuối
+        if (!pastedData.endsWith('\n')) {
+            pastedData += '\n';
+        }
+        
+        // Lấy vị trí hiện tại của con trỏ
+        const input = e.target;
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+        const value = input.value;
+        
+        // Chèn text đã paste vào vị trí con trỏ
+        const newValue = value.substring(0, start) + pastedData + value.substring(end);
+        input.value = newValue;
+        
+        // Tính toán vị trí mới cho con trỏ (cuối dòng vừa paste)
+        const lines = newValue.split('\n');
+        const currentLine = newValue.substring(0, start).split('\n').length;
+        const position = newValue.split('\n').slice(0, currentLine).join('\n').length + pastedData.length;
+        
+        // Đặt con trỏ vào vị trí mới
+        setTimeout(() => {
+            input.setSelectionRange(position, position);
+            input.focus();
+        }, 0);
+        
+        saveInputValue();
+    });
+
+    // Xử lý input
+    document.querySelector('.email-input').addEventListener('input', function(e) {
+        let value = e.target.value;
+        e.target.value = value.trim();
+        saveInputValue();
+        
+        // Đặt con trỏ xuống dòng mới nếu đang ở cuối dòng
+        const input = e.target;
+        const lines = input.value.split('\n');
+        const currentLine = input.value.substring(0, input.selectionStart).split('\n').length;
+        const position = input.value.split('\n').slice(0, currentLine).join('\n').length + 1;
+        input.setSelectionRange(position, position);
+    });
+
+    // Xử lý keydown để thêm xuống dòng khi nhấn Enter
+    document.querySelector('.email-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const input = e.target;
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            const value = input.value;
+            
+            // Thêm xuống dòng mới
+            input.value = value.substring(0, start) + '\n' + value.substring(end);
+            
+            // Đặt con trỏ xuống dòng mới
+            const newPosition = start + 1;
+            input.setSelectionRange(newPosition, newPosition);
+            
+            saveInputValue();
+        }
+    });
+  </script>
+
+</body>
+</html>

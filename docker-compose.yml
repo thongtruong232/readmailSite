@@ -1,0 +1,35 @@
+# version: '3.8'
+
+# services:
+#   web:
+#     build: .
+#     ports:
+#       - "8002:8002"
+#     depends_on:
+#       - redis
+#     environment:
+#       - REDIS_HOST=redis
+#       - REDIS_PORT=6380
+#       - REDIS_PASSWORD=thongtruong232
+#     volumes:
+#       - .:/app
+#     restart: always
+#     networks:
+#       - app-network
+
+#   redis:
+#     image: redis:6.2-alpine
+#     command: redis-server --requirepass thongtruong232
+#     ports:
+#       - "6380:6379"
+#     volumes:
+#       - redis_data:/data
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
+
+# volumes:
+#   redis_data: 
